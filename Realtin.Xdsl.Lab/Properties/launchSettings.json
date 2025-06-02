@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Realtin.Xdsl.Lab": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
