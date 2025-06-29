@@ -28,16 +28,10 @@ public sealed class XdslReader : IDisposable
 		}
 	}
 
-	private XdslReader(XdslNode node)
-	{
-		_root = Current = node;
-	}
+	private XdslReader(XdslNode node) => _root = Current = node;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public bool CanRead()
-	{
-		return _root.Children is not null;
-	}
+	public bool CanRead() => _root.Children is not null;
 
 	/// <exception cref="XdslException"></exception>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -80,6 +74,7 @@ public sealed class XdslReader : IDisposable
 	public void EnterProperty(string propertyName)
 	{
 		Current = GetProperty(propertyName);
+		
 		_propertyDepth++;
 	}
 
@@ -198,11 +193,15 @@ public sealed class XdslReader : IDisposable
 		return Guid.Parse(GetProperty(propertyName).Text);
 	}
 
-	//Might Be Useful.
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public void Dispose()
+	public TEnum ReadEnum<TEnum>(string propertyName) where TEnum : struct
 	{
+		return Enum.Parse<TEnum>(GetProperty(propertyName).Text ?? "");
 	}
+
+	// Might Be Useful.
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public void Dispose() { }
 
 	public static XdslReader Create(XdslNode node)
 	{

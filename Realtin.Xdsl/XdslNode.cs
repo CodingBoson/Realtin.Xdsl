@@ -74,7 +74,8 @@ public abstract class XdslNode : IEquatable<XdslNode?>, IEnumerable<XdslNode>
     /// <see langword="xdsl:import"/>
     /// </para>
     /// </summary>
-    public virtual bool IsSpecialName => Name.Contains(":", StringComparison.OrdinalIgnoreCase);
+    public virtual bool IsSpecialName => Name.Contains(":",
+		StringComparison.OrdinalIgnoreCase);
 
 	/// <summary>
 	/// Gets the opening node of this node.

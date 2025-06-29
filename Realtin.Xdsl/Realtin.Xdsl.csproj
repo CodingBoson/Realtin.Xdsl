@@ -6,6 +6,18 @@
 	  <LangVersion>preview</LangVersion>
 	  <Authors>Realtin (CodingBoson)</Authors>
 	  <Company>BosonWare, Technologies</Company>
+
+      <Version>1.0.1</Version>
+      <Copyright>BosonWare, Technologies</Copyright>
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
+
+      <PackageProjectUrl>https://github.com/CodingBoson/Realtin.Xdsl</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/CodingBoson/Realtin.Xdsl</RepositoryUrl>
   </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
 </Project>
