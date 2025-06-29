@@ -25,11 +25,14 @@ public class XdslElement : XdslNode
 	/// </summary>
 	public XdslDocument Document
 	{
-		get {
+		get
+		{
 			var parent = Parent;
 
-			while (parent is not null) {
-				if (parent is XdslDocument document) {
+			while (parent is not null)
+			{
+				if (parent is XdslDocument document)
+				{
 					return document;
 				}
 
@@ -67,7 +70,8 @@ public class XdslElement : XdslNode
 	/// <exception cref="XdslException"></exception>
 	public virtual byte[] LoadResource()
 	{
-		if (Document.ResourceProvider == null) {
+		if (Document.ResourceProvider == null)
+		{
 			throw new XdslException($"ResourceProvider does not exist.");
 		}
 
@@ -76,58 +80,63 @@ public class XdslElement : XdslNode
 		return Document.ResourceProvider.GetResourceBytes(resourcePath);
 	}
 
-    /// <summary>
-    /// Loads a resource from the document's resource provider.
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="XdslException"></exception>
-    public virtual async Task<byte[]> LoadResourceAsync()
-    {
-        if (Document.ResourceProvider == null) {
-            throw new XdslException($"ResourceProvider does not exist.");
-        }
+	/// <summary>
+	/// Loads a resource from the document's resource provider.
+	/// </summary>
+	/// <returns></returns>
+	/// <exception cref="XdslException"></exception>
+	public virtual async Task<byte[]> LoadResourceAsync()
+	{
+		if (Document.ResourceProvider == null)
+		{
+			throw new XdslException($"ResourceProvider does not exist.");
+		}
 
-        var resourcePath = GetAttribute("src")?.Value ?? throw new XdslException($"Missing src attribute on '{Name}'.");
+		var resourcePath = GetAttribute("src")?.Value ?? throw new XdslException($"Missing src attribute on '{Name}'.");
 
-        return await Document.ResourceProvider.GetResourceBytesAsync(resourcePath);
-    }
+		return await Document.ResourceProvider.GetResourceBytesAsync(resourcePath);
+	}
 
-    /// <summary>
-    /// Loads a text resource from the document's resource provider.
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="XdslException"></exception>
-    public string LoadTextResource() => Encoding.UTF8.GetString(bytes: LoadResource());
+	/// <summary>
+	/// Loads a text resource from the document's resource provider.
+	/// </summary>
+	/// <returns></returns>
+	/// <exception cref="XdslException"></exception>
+	public string LoadTextResource() => Encoding.UTF8.GetString(bytes: LoadResource());
 
-    /// <summary>
-    /// Loads a text resource from the document's resource provider.
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="XdslException"></exception>
-    public async Task<string> LoadTextResourceAsync()
-    {
+	/// <summary>
+	/// Loads a text resource from the document's resource provider.
+	/// </summary>
+	/// <returns></returns>
+	/// <exception cref="XdslException"></exception>
+	public async Task<string> LoadTextResourceAsync()
+	{
 		var bytes = await LoadResourceAsync();
 
-        return Encoding.UTF8.GetString(bytes);
-    }
+		return Encoding.UTF8.GetString(bytes);
+	}
 
-    /// <inheritdoc/>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+	/// <inheritdoc/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override void WriteContentToIndented(XdslTextWriter writer)
 	{
-		if (Children is not null) {
-			if (!string.IsNullOrEmpty(Text)) {
+		if (Children is not null)
+		{
+			if (!string.IsNullOrEmpty(Text))
+			{
 				WriteXNodeTo(writer, false);
 
 				writer.EnterChild();
 				writer.Write(Text);
 				writer.ExitChild();
 			}
-			else {
+			else
+			{
 				WriteXNodeTo(writer, false);
 			}
 
-			for (int i = 0; i < Children.Count; i++) {
+			for (int i = 0; i < Children.Count; i++)
+			{
 				writer.EnterChild();
 
 				Children[i].WriteContentToIndented(writer);
@@ -140,15 +149,18 @@ public class XdslElement : XdslNode
 			writer.Write(Name);
 			writer.Write(">");
 		}
-		else {
-			if (!string.IsNullOrEmpty(Text)) {
+		else
+		{
+			if (!string.IsNullOrEmpty(Text))
+			{
 				WriteXNodeTo(writer, false);
 				writer.Write(Text);
 				writer.Write("</");
 				writer.Write(Name);
 				writer.Write('>');
 			}
-			else {
+			else
+			{
 				WriteXNodeTo(writer, selfEnclosing: true);
 			}
 		}
@@ -158,11 +170,13 @@ public class XdslElement : XdslNode
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override void WriteContentTo(XdslTextWriter writer)
 	{
-		if (Children is not null) {
+		if (Children is not null)
+		{
 			WriteXNodeTo(writer, false);
 			writer.Write(Text ?? string.Empty);
 
-			for (int i = 0; i < Children.Count; i++) {
+			for (int i = 0; i < Children.Count; i++)
+			{
 				Children[i].WriteContentTo(writer);
 			}
 
@@ -170,15 +184,18 @@ public class XdslElement : XdslNode
 			writer.Write(Name);
 			writer.Write(">");
 		}
-		else {
-			if (!string.IsNullOrEmpty(Text)) {
+		else
+		{
+			if (!string.IsNullOrEmpty(Text))
+			{
 				WriteXNodeTo(writer, false);
 				writer.Write(Text);
 				writer.Write("</");
 				writer.Write(Name);
 				writer.Write('>');
 			}
-			else {
+			else
+			{
 				WriteXNodeTo(writer, selfEnclosing: true);
 			}
 		}
@@ -188,28 +205,35 @@ public class XdslElement : XdslNode
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private void WriteXNodeTo(XdslTextWriter writer, bool selfEnclosing)
 	{
-		if (Attributes is null) {
+		if (Attributes is null)
+		{
 			writer.Write('<');
 			writer.Write(Name);
 
-			if (selfEnclosing) {
+			if (selfEnclosing)
+			{
 				writer.Write(" />");
 			}
-			else {
+			else
+			{
 				writer.Write('>');
 			}
 		}
-		else {
+		else
+		{
 			writer.Write('<');
 			writer.Write(Name);
 			writer.Write(' ');
 
 			bool first = true;
-			for (int i = 0; i < Attributes.Count; i++) {
-				if (first) {
+			for (int i = 0; i < Attributes.Count; i++)
+			{
+				if (first)
+				{
 					first = false;
 				}
-				else {
+				else
+				{
 					writer.Write(' ');
 				}
 
@@ -223,10 +247,12 @@ public class XdslElement : XdslNode
 				writer.Write('"');
 			}
 
-			if (selfEnclosing) {
+			if (selfEnclosing)
+			{
 				writer.Write(" />");
 			}
-			else {
+			else
+			{
 				writer.Write('>');
 			}
 		}
@@ -236,15 +262,17 @@ public class XdslElement : XdslNode
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	internal string WriteToString(bool writeIndented)
 	{
-		//var builder = StringBuilderPool.Acquire();
+		//var builder = StringBuilderPool.Rent();
 		var builder = TempStringBuilder.Temp();
 
 		var writer = XdslTextWriter.Create(builder);
 
-		if (writeIndented) {
+		if (writeIndented)
+		{
 			WriteContentToIndented(writer);
 		}
-		else {
+		else
+		{
 			WriteContentTo(writer);
 		}
 

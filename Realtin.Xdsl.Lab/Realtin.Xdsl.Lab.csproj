@@ -9,11 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.8" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Realtin.Xdsl.Experimental\Realtin.Xdsl.Experimental.csproj" />
     <ProjectReference Include="..\Realtin.Xdsl\Realtin.Xdsl.csproj" />
   </ItemGroup>

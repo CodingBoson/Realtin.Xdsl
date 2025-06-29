@@ -170,6 +170,16 @@ public sealed class XdslWriter : IDisposable
 		return elem;
 	}
 
+	public XdslElement Write<TEnum>(string propertyName, TEnum value)
+		where TEnum : Enum
+	{
+		var elem = new XdslElement(propertyName, value.ToString());
+
+		_current.AppendChild(elem);
+
+		return elem;
+	}
+
 	public XdslElement Write(string propertyName, XdslElement property)
 	{
 		property.Name = propertyName;
