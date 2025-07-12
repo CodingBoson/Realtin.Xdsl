@@ -1,0 +1,10 @@
+<?XDSL Version="1.0" DocType="Document"?>
+
+<Database>
+    <Users>
+        <User>
+            <Name>User</Name>
+            <Email>user@example.com</Email>
+        </User>
+    </Users>
+</Database>

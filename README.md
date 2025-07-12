@@ -20,10 +20,14 @@ The solution consists of three main projects:
 
 ## Getting Started
 ### Installation
-Add a reference to the Realtin.Xdsl package in your project:
+Add a reference to the `Realtin.Xdsl` package in your project:
 
+```bash
+dotnet add package Realtin.Xdsl
+```
+Or
 ```xml
-<PackageReference Include="Realtin.Xdsl" Version="1.0.0" />
+<PackageReference Include="Realtin.Xdsl" Version="1.2.0" />
 ```
 
 
@@ -32,12 +36,59 @@ Add a reference to the Realtin.Xdsl package in your project:
 ```csharp
 // Create a new XDSL document
 var document = new XdslDocument();
+
 // Create and add elements 
-var root = document.CreateElement("root", element => { element.CreateElement("child", child => { child.AddAttribute("name", "value"); child.Text = "Hello XDSL!"; }); });
+document.CreateElement("Person", person => {
+    person.CreateElement("FirstName", x => x.Text = "Java");
+    person.CreateElement("LastName", x => x.Text = "Script");
+    person.CreateElement("Age", x => x.Text = "30");
+});
+
 // Write document to string 
-string output = document.WriteToString(indented: true);
+var prettyOutput = document.WriteToString(writeIndented: true);
+
+Console.WriteLine(prettyOutput);
 ```
 
+### Serialize an Object to Xdsl
+
+```csharp
+using Realtin.Xdsl;
+using Realtin.Xdsl.Serialization;
+
+var user = new
+{
+    Name = "User",
+    Email = "user@example.com",
+    Age = 20
+};
+
+var document = XdslSerializer.Serialize(user);
+Console.WriteLine(document.WriteToString(writeIndented: true));
+```
+
+**Output:**
+
+```xml
+<User>
+  <Name>Realtin</Name>
+  <Email>realtin@example.com</Email>
+  <Age>20</Age>
+</User>
+```
+
+### XQL Queries
+```csharp
+var usersResult = XqlExpression
+    .Compile(@"WHERE X:NAME == ""User"" SELECT")
+    .Execute(doc, XqlPermissions.Read);
+
+if (usersResult.TryCast<IEnumerable<XdslElement>>(out var users)) {
+    foreach (var user in users) {
+        Console.WriteLine(user.Text);
+    }
+}
+```
 
 ## Key Components
 
@@ -69,17 +120,27 @@ The library is designed with performance in mind:
 - Optional pooling for frequently used objects
 - Optimized string operations
 
+### Performance Benchmarks
+
+Xdsl offers industry-leading performance for serialization and deserialization. Benchmarks compared to popular formats:
+
+|Serializer|Time (ns)|Size (Bytes)|
+|---|---|---|
+|**Xdsl Custom Serializer**|236.1|600|
+|**Proto Serializer**|774.7|504|
+|**Newtonsoft JSON**|2,043.5|4,160|
+
+
 ## Requirements
 - .NET Standard 2.1 or higher
 - C# 13.0 features supported
-- Docker (optional, for containerized testing)
 
 ## License
-GNU GENERAL PUBLIC LICENSE - See LICENSE file for details
+MIT - See LICENSE file for details
 
 ## Authors
 - Realtin (CodingBoson)
-- BosonWare Technologies
+- BosonWare, Technologies
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.

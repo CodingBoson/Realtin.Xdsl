@@ -1,5 +1,9 @@
 ﻿using Realtin.Xdsl;
 
+var doc = XdslDocument.CreateFromFile("./Example.xdsl");
+
+Console.WriteLine(doc.WriteToString(writeIndented: true));
+
 var document = new XdslDocument();
 
 document.CreateElement("Person", person => {

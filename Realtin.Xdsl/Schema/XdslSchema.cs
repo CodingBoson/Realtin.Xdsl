@@ -31,7 +31,7 @@ public sealed partial class XdslSchema : IEquatable<XdslSchema?>
     public void AssertIsImplemented(XdslDocument document)
 	{
 		var result = Validate(document);
-
+        
 		if (result.HasErrors) {
 			throw new XdslSchemaException(result.MakeErrorString());
 		}

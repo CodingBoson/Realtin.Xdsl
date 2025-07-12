@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Realtin.Xdsl.Optimization;
@@ -75,8 +74,6 @@ public sealed class XdslPropertyInfo
 		}
 	}
 
-	#region Get & Set
-
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public object? GetValue(object target)
 	{
@@ -123,29 +120,4 @@ public sealed class XdslPropertyInfo
 			propertyInfo.SetValue(target, value);
 		}
 	}
-
-	#endregion Get & Set
-
-	#region Quick Access
-
-	public bool TryGetAttribute(Type type, [NotNullWhen(true)] out Attribute? attribute)
-	{
-		attribute = UnderlyingMember.GetCustomAttribute(type);
-
-		return attribute != null;
-	}
-
-	public bool TryGetAttribute<TAttribute>([NotNullWhen(true)] out TAttribute? attribute) where TAttribute : Attribute
-	{
-		attribute = UnderlyingMember.GetCustomAttribute<TAttribute>();
-
-		return attribute != null;
-	}
-
-	public bool HasAttribute<TAttribute>() where TAttribute : Attribute
-	{
-		return Attribute.IsDefined(UnderlyingMember, typeof(TAttribute));
-	}
-
-	#endregion Quick Access
 }

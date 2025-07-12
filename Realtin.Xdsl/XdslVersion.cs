@@ -63,6 +63,10 @@ public readonly struct XdslVersion(int major, int minor) : IEquatable<XdslVersio
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static XdslVersion Parse(ReadOnlySpan<char> version)
 	{
+		if (version.Equals("Latest", StringComparison.OrdinalIgnoreCase)) {
+			return OnePoint0;
+		}
+		
 		int num = version.IndexOf('.');
 
 		if (num < 0) {

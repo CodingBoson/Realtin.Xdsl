@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Realtin.Xdsl.Utilities;
 
@@ -7,7 +8,7 @@ namespace Realtin.Xdsl.Serialization;
 
 public sealed class XdslTypeInfo
 {
-	private static readonly Dictionary<Type, XdslTypeInfo> _cache = [];
+	private static readonly ConcurrentDictionary<Type, XdslTypeInfo> _cache = [];
 
 	public readonly Type Type;
 
@@ -104,14 +105,14 @@ public sealed class XdslTypeInfo
 
     public static void Cache(Type type, XdslSerializerOptions options) => Create(type, options);
 
-    public static bool ClearCacheForType(Type type) => _cache.Remove(type);
+    public static bool ClearCacheForType(Type type) => _cache.TryRemove(type, out _);
 
     public static XdslTypeInfo Create(Type type, XdslSerializerOptions options)
 	{
 		if (!_cache.TryGetValue(type, out var info)) {
 			info = new XdslTypeInfo(type, options);
 
-			_cache.Add(type, info);
+			_cache.TryAdd(type, info);
 		}
 
 		return info;

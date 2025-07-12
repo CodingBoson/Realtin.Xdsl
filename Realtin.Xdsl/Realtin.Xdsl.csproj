@@ -7,21 +7,21 @@
 	  <Authors>Realtin (CodingBoson)</Authors>
 	  <Company>BosonWare, Technologies</Company>
 
-      <PackageReleaseNotes>
-        Added Enum serialization support, improved resource handling methods, and refactored code for better readability and maintainability.
-      </PackageReleaseNotes>
-      <Version>1.0.1</Version>
+      <Version>1.2.0</Version>
       <Copyright>BosonWare, Technologies</Copyright>
       <PackageLicenseExpression>MIT</PackageLicenseExpression>
       <PackageReadmeFile>README.md</PackageReadmeFile>
 
-      <PackageProjectUrl>https://github.com/CodingBoson/Realtin.Xdsl</PackageProjectUrl>
-      <RepositoryUrl>https://github.com/CodingBoson/Realtin.Xdsl</RepositoryUrl>
-  </PropertyGroup>
+      <PackageProjectUrl>
+      https://github.com/CodingBoson/Realtin.Xdsl
+      </PackageProjectUrl>
+      <RepositoryUrl>
+      https://github.com/CodingBoson/Realtin.Xdsl
+      </RepositoryUrl>
 
-    <ItemGroup>
-        <None Include="../README.md" Pack="true" PackagePath="\"/>
-    </ItemGroup>
+      <PackageReleaseNotes>
+      </PackageReleaseNotes>
+  </PropertyGroup>
 
     <ItemGroup>
         <None Include="../README.md" Pack="true" PackagePath="\"/>

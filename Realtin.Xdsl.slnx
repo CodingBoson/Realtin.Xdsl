@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/docs/">
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Realtin.Xdsl.Experimental/Realtin.Xdsl.Experimental.csproj" />
+  <Project Path="Realtin.Xdsl.Lab/Realtin.Xdsl.Lab.csproj" />
+  <Project Path="Realtin.Xdsl/Realtin.Xdsl.csproj" />
+</Solution>

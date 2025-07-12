@@ -1,7 +1,4 @@
-﻿using Realtin.Xdsl.NamingConventions;
-using Realtin.Xdsl.Pooling;
-using Realtin.Xdsl.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,6 +6,9 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Realtin.Xdsl.NamingConventions;
+using Realtin.Xdsl.Pooling;
+using Realtin.Xdsl.Utilities;
 
 namespace Realtin.Xdsl;
 
@@ -22,21 +22,18 @@ public sealed class XdslDocument : XdslNode
 	/// <inheritdoc/>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public override string? Text
-	{ get => string.Empty; set { } }
+	public override string? Text { get => string.Empty; set { } }
 
 	/// <inheritdoc/>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	public override string Name
-	{ get => "Document"; set { } }
+	public override string Name { get => "Document"; set { } }
 
 	/// <inheritdoc/>
 	public override XdslNodeType NodeType => XdslNodeType.Document;
 
 	/// <inheritdoc/>
-	public override bool IsEmpty
-	{
+	public override bool IsEmpty {
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => Children is null || Children.Count == 0;
 	}
@@ -46,13 +43,12 @@ public sealed class XdslDocument : XdslNode
 	/// The version declared in the document.
 	/// </summary>
 	/// <returns>1.0 if the version is not declared.</returns>
-	public XdslVersion Version
-	{
+	public XdslVersion Version {
 		get {
 			var xdslTag = GetChild<object?>(null, (state, x) => x.NodeType == XdslNodeType.Tag
-			&& x.Name.Equals("xdsl", StringComparison.OrdinalIgnoreCase));
+			&& x.Name.Equals("XDSL", StringComparison.OrdinalIgnoreCase));
 
-			if (xdslTag == null || !xdslTag.TryGetAttribute("version", out var versionAttribute)) {
+			if (xdslTag == null || !xdslTag.TryGetAttribute("Version", out var versionAttribute)) {
 				return XdslVersion.OnePoint0;
 			}
 
@@ -60,15 +56,15 @@ public sealed class XdslDocument : XdslNode
 		}
 		set {
 			var xdslTag = GetChild<object?>(null, (state, x) => x.NodeType == XdslNodeType.Tag
-			&& x.Name.Equals("xdsl", StringComparison.OrdinalIgnoreCase));
+			&& x.Name.Equals("XDSL", StringComparison.OrdinalIgnoreCase));
 
 			if (xdslTag == null) {
-				xdslTag = CreateTag("xdsl");
+				xdslTag = CreateTag("XDSL");
 
 				MoveElement(0, xdslTag);
 			}
 
-			var versionAttribute = xdslTag.GetOrAddAttribute("version");
+			var versionAttribute = xdslTag.GetOrAddAttribute("Version");
 
 			versionAttribute.Value = value.ToString();
 		}
@@ -79,13 +75,12 @@ public sealed class XdslDocument : XdslNode
 	/// The document type declared in the document.
 	/// </summary>
 	/// <returns></returns>
-	public XdslDocumentType DocType
-	{
+	public XdslDocumentType DocType {
 		get {
 			var xdslTag = GetChild<object?>(null, (state, x) => x.NodeType == XdslNodeType.Tag
-			&& x.Name.Equals("xdsl", StringComparison.OrdinalIgnoreCase));
+			&& x.Name.Equals("XDSL", StringComparison.OrdinalIgnoreCase));
 
-			if (xdslTag == null || !xdslTag.TryGetAttribute("docType", out var docTypeAttribute)) {
+			if (xdslTag == null || !xdslTag.TryGetAttribute("DocType", out var docTypeAttribute)) {
 				return XdslDocumentType.Document;
 			}
 
@@ -93,15 +88,15 @@ public sealed class XdslDocument : XdslNode
 		}
 		set {
 			var xdslTag = GetChild<object?>(null, (state, x) => x.NodeType == XdslNodeType.Tag
-			&& x.Name.Equals("xdsl", StringComparison.OrdinalIgnoreCase));
+			&& x.Name.Equals("XDSL", StringComparison.OrdinalIgnoreCase));
 
 			if (xdslTag == null) {
-				xdslTag = CreateTag("xdsl");
+				xdslTag = CreateTag("XDSL");
 
 				MoveElement(0, xdslTag);
 			}
 
-			var docTypeAttribute = xdslTag.GetOrAddAttribute("docType");
+			var docTypeAttribute = xdslTag.GetOrAddAttribute("DocType");
 
 			docTypeAttribute.Value = value.Type;
 		}
@@ -111,8 +106,7 @@ public sealed class XdslDocument : XdslNode
 	/// The root element of the document.
 	/// Tags and comments cannot be root elements.
 	/// </summary>
-	public XdslElement? Root
-	{
+	public XdslElement? Root {
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get {
 			if (Children is null) {
@@ -137,30 +131,29 @@ public sealed class XdslDocument : XdslNode
 	/// </summary>
 	public IResourceProvider? ResourceProvider { get; set; }
 
-    /// <summary>
-    /// Gets an IEnumerable of imported documents. 
-    /// </summary>
-    public IEnumerable<string> ImportedDocuments
-    {
-        get {
+	/// <summary>
+	/// Gets an IEnumerable of imported documents. 
+	/// </summary>
+	public IEnumerable<string> ImportedDocuments {
+		get {
 			if (Children is null)
 				yield break;
 
 			foreach (var child in Children) {
-				if (child.NodeType == XdslNodeType.Tag && child.IsSpecialName 
-					&& child.Name.EqualsOrdinalIgnoreCase("xdsl:import")) { 
+				if (child.NodeType == XdslNodeType.Tag && child.IsSpecialName
+					&& child.Name.EqualsOrdinalIgnoreCase("xdsl:import")) {
 					if (child.TryGetAttribute("src", out var attribute)) {
 						yield return attribute.Value;
 					}
 				}
 			}
-        }
-    }
+		}
+	}
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="XdslDocument"/> class.
-    /// </summary>
-    public XdslDocument() : base("Document", null)
+	/// <summary>
+	/// Initializes a new instance of the <see cref="XdslDocument"/> class.
+	/// </summary>
+	public XdslDocument() : base("Document", null)
 	{
 	}
 
@@ -231,27 +224,27 @@ public sealed class XdslDocument : XdslNode
 		newParent.AppendChild(elementToReparent);
 	}
 
-    /// <summary>
-    /// Replaces the <paramref name="oldElement"/> with the <paramref name="newElement"/>.
-    /// </summary>
-    /// <param name="oldElement"></param>
-    /// <param name="newElement"></param>
-    /// <exception cref="XdslException">The old element is not in this document.</exception>
-    public void Replace(XdslElement oldElement, XdslElement newElement)
-    {
-        if (oldElement.Document == (object)this) {
-            throw new XdslException("The old element is not in this document.");
-        }
+	/// <summary>
+	/// Replaces the <paramref name="oldElement"/> with the <paramref name="newElement"/>.
+	/// </summary>
+	/// <param name="oldElement"></param>
+	/// <param name="newElement"></param>
+	/// <exception cref="XdslException">The old element is not in this document.</exception>
+	public void Replace(XdslElement oldElement, XdslElement newElement)
+	{
+		if (oldElement.Document == (object)this) {
+			throw new XdslException("The old element is not in this document.");
+		}
 
 		var position = oldElement.Parent.Children!.IndexOf(oldElement);
 
 		oldElement.Parent.Children[position] = newElement;
 
 		oldElement.Parent = null!;
-    }
+	}
 
-    /// <exception cref="XdslException"></exception>
-    public void LoadXdsl(string xdsl, XdslDocumentOptions options)
+	/// <exception cref="XdslException"></exception>
+	public void LoadXdsl(string xdsl, XdslDocumentOptions options)
 	{
 		Children?.Clear();
 
@@ -263,8 +256,8 @@ public sealed class XdslDocument : XdslNode
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public string WriteToString(bool writeIndented)
 	{
-		//var builder = StringBuilderPool.Acquire();
-		var builder = TempStringBuilder.Temp();
+		var builder = StringBuilderPool.Rent();
+		//var builder = TempStringBuilder.Temp();
 
 		var writer = XdslTextWriter.Create(builder);
 
@@ -277,7 +270,7 @@ public sealed class XdslDocument : XdslNode
 
 		var text = builder.ToString();
 
-		//StringBuilderPool.Release(builder);
+		StringBuilderPool.Return(builder);
 
 		return text;
 	}
@@ -443,7 +436,10 @@ public sealed class XdslDocument : XdslNode
 	/// <param name="options"></param>
 	/// <returns></returns>
 	/// <exception cref="XdslException"></exception>
-	public static Task<XdslDocument> CreateAsync(string xdsl, XdslDocumentOptions? options = default)
+	[Obsolete("Use Create instead.")]
+	public static Task<XdslDocument> CreateAsync(
+		string xdsl,
+		XdslDocumentOptions? options = default)
 	{
 		return Task<XdslDocument>.Factory.StartNew(() => Create(xdsl, options));
 	}
@@ -455,7 +451,10 @@ public sealed class XdslDocument : XdslNode
 	/// <param name="encoding"></param>
 	/// <param name="options"></param>
 	/// <returns></returns>
-	public static XdslDocument Create(ReadOnlySpan<byte> bytes, Encoding encoding, XdslDocumentOptions? options = default)
+	public static XdslDocument Create(
+		ReadOnlySpan<byte> bytes,
+		Encoding encoding,
+		XdslDocumentOptions? options = default)
 	{
 		ThrowerHelper.ThrowIfArgumentNull(nameof(encoding), encoding);
 
@@ -470,7 +469,9 @@ public sealed class XdslDocument : XdslNode
 	/// <param name="utf8Bytes">A byte array representing an XDSL document encoded in UTF-8.</param>
 	/// <param name="options"></param>
 	/// <returns></returns>
-	public static XdslDocument Create(ReadOnlySpan<byte> utf8Bytes, XdslDocumentOptions? options = default)
+	public static XdslDocument Create(
+		ReadOnlySpan<byte> utf8Bytes,
+		XdslDocumentOptions? options = default)
 	{
 		var text = Encoding.UTF8.GetString(utf8Bytes);
 
@@ -485,7 +486,9 @@ public sealed class XdslDocument : XdslNode
 	/// <returns></returns>
 	/// <exception cref="IOException"></exception>
 	/// <exception cref="XdslException"></exception>
-	public static XdslDocument CreateFromFile(string fileName, XdslDocumentOptions? options = default)
+	public static XdslDocument CreateFromFile(
+		string fileName,
+		XdslDocumentOptions? options = default)
 	{
 		var xdsl = File.ReadAllText(fileName);
 
@@ -500,10 +503,12 @@ public sealed class XdslDocument : XdslNode
 	/// <returns></returns>
 	/// <exception cref="IOException"></exception>
 	/// <exception cref="XdslException"></exception>
-	public static async Task<XdslDocument> CreateFromFileAsync(string fileName, XdslDocumentOptions? options = default)
+	public static async Task<XdslDocument> CreateFromFileAsync(
+		string fileName,
+		XdslDocumentOptions? options = default)
 	{
 		var xdsl = await File.ReadAllTextAsync(fileName);
 
-		return await CreateAsync(xdsl, options);
+		return Create(xdsl, options);
 	}
 }

@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Realtin.Xdsl.Serialization
+namespace Realtin.Xdsl.Serialization;
+
+public interface IXdslSerializeReferenceResolver
 {
-    public interface IXdslSerializeReferenceResolver
-	{
-		Type GetType(string propertyName);
-	}
+	Type GetType(string propertyName);
 }

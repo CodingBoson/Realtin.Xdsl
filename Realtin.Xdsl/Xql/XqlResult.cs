@@ -1,4 +1,6 @@
-﻿namespace Realtin.Xdsl.Xql;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Realtin.Xdsl.Xql;
 
 /// <summary>
 /// Represents an XQL query result.
@@ -62,6 +64,19 @@ public readonly struct XqlResult
 	public T Cast<T>() where T : class =>
 		// Allow the user to specify if the type is nullable.
 		(T)Data!;
+
+	public bool TryCast<T>([NotNullWhen(true)] out T? result) where T : class
+	{
+		if (Success && Data is T dataAsT) {
+			result = dataAsT;
+
+			return true;
+		}
+
+		result = null;
+
+		return false;
+	}
 
 	/// <summary>
 	/// Creates a failed <see cref="XqlResult"/> structure.
